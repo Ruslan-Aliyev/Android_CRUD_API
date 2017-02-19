@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruslan_website.travelblog.utils.common.Image;
 import com.ruslan_website.travelblog.utils.common.Network;
@@ -62,6 +64,7 @@ public class EntryActivity extends AppCompatActivity {
     @BindView(R.id.bRefresh) Button bRefresh;
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,8 @@ public class EntryActivity extends AppCompatActivity {
 
     private void obtainEntry() {
 
+        setProgressStatus(true, "Loading content", "Loading entries");
+
         OkHttpClient client = makeHttpClient();
 
         entryService = new Retrofit.Builder()
@@ -120,7 +125,7 @@ public class EntryActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<List<Entry>> call, Throwable t) {
-                Log.i("Entry - Error", t.getMessage());
+                setProgressStatus(false, "Update your app. App will close.", "Entry - Error: " + t.getMessage());
             }
         });
 
@@ -150,16 +155,18 @@ public class EntryActivity extends AppCompatActivity {
                     try {
                         makeEntryList(response.body(), imgName, entry);
                     } catch (Exception e) {
+                        setProgressStatus(false, "Update your app. App will close.", "makeEntryList - Error: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.i("Download Image Error", t.getMessage());
+                    setProgressStatus(false, "Update your app. App will close.", "Download Image Error" + t.getMessage());
                 }
             });
 
         }
+        setProgressStatus(false, "All contents loaded.", "All contents loaded");
     }
 
     private void makeEntryList(ResponseBody body, String imgName, Entry entry) {
@@ -225,4 +232,17 @@ public class EntryActivity extends AppCompatActivity {
         init();
     }
 
+    private void setProgressStatus(boolean isInProgress, String toast, String log){
+        if(isInProgress){
+            bRefresh.setText("Loading ...");
+            bRefresh.setEnabled(false);
+            progressBar.setVisibility(View.VISIBLE);
+        }else{
+            bRefresh.setText("Refresh");
+            bRefresh.setEnabled(true);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Toast.makeText(EntryActivity.this, toast, Toast.LENGTH_LONG).show();
+        Log.i("LoadEntriesMessage", log);
+    }
 }

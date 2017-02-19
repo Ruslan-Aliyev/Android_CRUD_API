@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class NewEntryActivity extends AppCompatActivity {
     @BindView(R.id.comments) EditText comments;
     @BindView(R.id.bImage) ImageButton bImage;
     @BindView(R.id.bSubmit) Button bSubmit;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +244,7 @@ public class NewEntryActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(NewEntryActivity.this, "Submitting ...", Toast.LENGTH_LONG).show();
+        setProgressStatus(true, "Submitting ...", "Submitting");
 
         OkHttpClient client = makeHttpClient();
 
@@ -272,12 +274,12 @@ public class NewEntryActivity extends AppCompatActivity {
         newEntryRequest.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getBaseContext(), "Create New Success: " + response.message(), Toast.LENGTH_SHORT).show();
+                setProgressStatus(false, "Submission Success.", "Create New Success: " + response.message());
                 back();
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getBaseContext(), "Create New Fail", Toast.LENGTH_SHORT).show();
+                setProgressStatus(false, "Submission Failure. Update your app.", "Create New Fail: " + t.getMessage());
                 t.printStackTrace();
                 back();
             }
@@ -289,4 +291,17 @@ public class NewEntryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void setProgressStatus(boolean isInProgress, String toast, String log){
+        if(isInProgress){
+            bSubmit.setText("Submitting ...");
+            bSubmit.setEnabled(false);
+            progressBar.setVisibility(View.VISIBLE);
+        }else{
+            bSubmit.setText("Submit");
+            bSubmit.setEnabled(true);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Toast.makeText(NewEntryActivity.this, toast, Toast.LENGTH_LONG).show();
+        Log.i("NewEntriesMessage", log);
+    }
 }

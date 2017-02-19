@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ruslan_website.travelblog.utils.common.Network;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.userEmail) EditText userEmail;
     @BindView(R.id.userPassword)  EditText userPassword;
     @BindView(R.id.bLogin) Button bLogin;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = userEmail.getText().toString();
         String password = userPassword.getText().toString();
 
-        Toast.makeText(LoginActivity.this, "Loading ...", Toast.LENGTH_LONG).show();
+        setProgressStatus(true, "Logging in ...", "Login button pressed");
 
         obtainToken(clientId, clientSecret, grantType, username, password);
     }
@@ -173,22 +175,24 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i("token", jsonObj.getString("access_token"));
                         obtainUserInfo();
                     } catch (Exception e) {
-                        Toast.makeText(LoginActivity.this, "Update your app. App will close.", Toast.LENGTH_LONG).show();
+                        setProgressStatus(false, "Update your app. App will close.", "Success but cant parse JSON: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }else{
-                    Toast.makeText(LoginActivity.this, "Update your app. App will close.", Toast.LENGTH_LONG).show();
+                    String errorBody;
                     try {
-                        Log.i("ERROR-BODY", response.errorBody().string());
+                        errorBody = response.errorBody().string();
                     } catch (IOException e) {
+                        errorBody = "Cant get errorBody: " + e.getMessage();
                         e.printStackTrace();
                     }
+                    setProgressStatus(false, "Update your app. App will close.", "ERROR-BODY: " + errorBody);
                 }
 
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("onFailure", t.getMessage());
+                setProgressStatus(false, "Update your app. App will close.", "onFailure: " + t.getMessage());
                 t.printStackTrace();
             }
         });
@@ -212,15 +216,28 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 mSPM.setUserId( response.body().getId() );
                 mSPM.setUsername( String.valueOf(response.body().getName()) );
-                Log.i("UserInfo", String.valueOf(response.body().getName()) + " " + String.valueOf(response.body().getId()));
+                setProgressStatus(false, "Login Succeeded", "UserInfo: " + String.valueOf(response.body().getName()) + " " + String.valueOf(response.body().getId()));
                 Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
                 startActivity(intent);
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Update your app. App will close.", Toast.LENGTH_LONG).show();
-                Log.i("UserInfo - Error", t.getMessage());
+                setProgressStatus(false, "Update your app. App will close.", "UserInfo - Error: " + t.getMessage());
             }
         });
+    }
+
+    private void setProgressStatus(boolean isInProgress, String toast, String log){
+        if(isInProgress){
+            bLogin.setText("Logging in ...");
+            bLogin.setEnabled(false);
+            progressBar.setVisibility(View.VISIBLE);
+        }else{
+            bLogin.setText("Login");
+            bLogin.setEnabled(true);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_LONG).show();
+        Log.i("LoginMessage", log);
     }
 }

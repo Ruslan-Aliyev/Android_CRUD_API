@@ -51,4 +51,15 @@
 
     </ScrollView>
 
+    <ProgressBar
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminateDrawable="@drawable/progress"
+        android:layout_below="@+id/greet"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/scrollView" />
+
 </RelativeLayout>

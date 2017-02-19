@@ -46,6 +46,18 @@
         android:text="Submit"
         android:id="@+id/bSubmit"
         android:layout_below="@+id/bImage"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/bImage" />
+
+    <ProgressBar
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminateDrawable="@drawable/progress"
+        android:layout_below="@+id/bImage"
+        android:layout_alignBottom="@+id/bSubmit"
+        android:layout_alignEnd="@+id/bImage"
+        android:layout_toEndOf="@+id/bSubmit" />
 
 </RelativeLayout>
