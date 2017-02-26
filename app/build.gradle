@@ -47,4 +47,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+    compile 'com.google.android.gms:play-services:8.3.0'
 }

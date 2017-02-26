@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.userEmail) EditText userEmail;
     @BindView(R.id.userPassword)  EditText userPassword;
+    @BindView(R.id.bRegister) Button bRegister;
     @BindView(R.id.bLogin) Button bLogin;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
@@ -74,8 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         permissions = new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ,Manifest.permission.READ_EXTERNAL_STORAGE
+                //,Manifest.permission.GET_ACCOUNTS
         };
 
         getPermissions(LoginActivity.this, permissions);
@@ -152,17 +154,18 @@ public class LoginActivity extends AppCompatActivity {
         String clientId = String.valueOf(mSPM.getClientId());
         String clientSecret = mSPM.getClientSecret();
         String grantType = "password";
+        String type = "normal";
         String username = userEmail.getText().toString();
         String password = userPassword.getText().toString();
 
         setProgressStatus(true, "Logging in ...", "Login button pressed");
 
-        obtainToken(clientId, clientSecret, grantType, username, password);
+        obtainToken(clientId, clientSecret, grantType, type, username, password);
     }
 
-    private void obtainToken(String clientId, String clientSecret, String grantType, String username, String password) {
+    private void obtainToken(String clientId, String clientSecret, String grantType, String type, String username, String password) {
 
-        Call<ResponseBody> tokenRequest = tokenService.obtain(clientId, clientSecret, grantType, username, password);
+        Call<ResponseBody> tokenRequest = tokenService.obtain(clientId, clientSecret, grantType, type, username, password);
 
         tokenRequest.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -229,15 +232,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setProgressStatus(boolean isInProgress, String toast, String log){
         if(isInProgress){
+            bRegister.setEnabled(false);
             bLogin.setText("Logging in ...");
             bLogin.setEnabled(false);
             progressBar.setVisibility(View.VISIBLE);
         }else{
+            bRegister.setEnabled(true);
             bLogin.setText("Login");
             bLogin.setEnabled(true);
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_SHORT).show();
         Log.i("LoginMessage", log);
+    }
+
+    @OnClick(R.id.bRegister)
+    public void toRegister(View view){
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
     }
 }

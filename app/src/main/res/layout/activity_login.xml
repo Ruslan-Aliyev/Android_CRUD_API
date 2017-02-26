@@ -33,7 +33,7 @@
         android:text="Login"
         android:id="@+id/bLogin"
         android:layout_below="@+id/userPassword"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
     <ProgressBar
         android:visibility="invisible"
@@ -45,5 +45,14 @@
         android:layout_toEndOf="@+id/bLogin"
         android:layout_alignBottom="@+id/bLogin"
         android:layout_below="@+id/userPassword" />
+
+    <Button
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/bRegister"
+        android:layout_alignTop="@+id/bLogin"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -242,7 +242,7 @@ public class EntryActivity extends AppCompatActivity {
             bRefresh.setEnabled(true);
             progressBar.setVisibility(View.INVISIBLE);
         }
-        Toast.makeText(EntryActivity.this, toast, Toast.LENGTH_LONG).show();
+        Toast.makeText(EntryActivity.this, toast, Toast.LENGTH_SHORT).show();
         Log.i("LoadEntriesMessage", log);
     }
 }

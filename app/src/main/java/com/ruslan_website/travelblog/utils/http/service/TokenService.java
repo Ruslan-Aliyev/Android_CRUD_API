@@ -13,6 +13,7 @@ public interface TokenService {
             @Field("client_id") String clientId,
             @Field("client_secret") String clientSecret,
             @Field("grant_type") String grantType,
+            @Field("type") String type,
             @Field("username") String username,
             @Field("password") String password);
 }

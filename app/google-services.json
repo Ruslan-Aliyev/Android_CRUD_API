@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1038249579917",
+    "project_id": "travelblogandroidlogin-159321"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038249579917:android:a7a5c8b9c8467cae",
+        "android_client_info": {
+          "package_name": "com.ruslan_website.travelblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038249579917-lae93pd9104fjkh3am7horc8eea53mnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ruslan_website.travelblog",
+            "certificate_hash": "6e22fc8f18fa7f57dd214091c2168f3cbed2e2b8"
+          }
+        },
+        {
+          "client_id": "1038249579917-j1fn8hsit9bn78pofnui4gqb422tkrec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATEXiuRexVB05Jam2NL-t0oK_tQT290cs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
