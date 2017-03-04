@@ -59,7 +59,7 @@ public class Facebook {
         callbackManager = CallbackManager.Factory.create();
     }
 
-    public void login(Activity activity, Callback callback){
+    public void signIn(Activity activity, Callback callback){
         mActivity = activity;
         mCallback = callback;
         Thread fbLoginThread = new Thread(new Runnable(){

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1038249579917",
-    "project_id": "travelblogandroidlogin-159321"
+    "project_number": "80198869558",
+    "project_id": "travelblog-android"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1038249579917:android:a7a5c8b9c8467cae",
+        "mobilesdk_app_id": "1:80198869558:android:a7a5c8b9c8467cae",
         "android_client_info": {
           "package_name": "com.ruslan_website.travelblog"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1038249579917-lae93pd9104fjkh3am7horc8eea53mnv.apps.googleusercontent.com",
+          "client_id": "80198869558-gha6m6ad1e0hk5ek24qnqlrbcj4152kc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ruslan_website.travelblog",
-            "certificate_hash": "6e22fc8f18fa7f57dd214091c2168f3cbed2e2b8"
+            "certificate_hash": "2396909c236781239418aef080f041f02f245f2c"
           }
         },
         {
-          "client_id": "1038249579917-j1fn8hsit9bn78pofnui4gqb422tkrec.apps.googleusercontent.com",
+          "client_id": "80198869558-ku9lei57rcph67ashcbc9i8plha9rhar.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyATEXiuRexVB05Jam2NL-t0oK_tQT290cs"
+          "current_key": "AIzaSyDDeOF1WrG45fe7mMp8qHzvk_ESb2OkiIc"
         }
       ],
       "services": {

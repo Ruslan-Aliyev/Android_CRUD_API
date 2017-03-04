@@ -27,6 +27,9 @@ import android.widget.Toast;
 
 import com.ruslan_website.travelblog.utils.common.Image;
 import com.ruslan_website.travelblog.utils.common.PathCombiner;
+import com.ruslan_website.travelblog.utils.common.UI;
+import com.ruslan_website.travelblog.utils.http.api.APIFactory;
+import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.Entry;
 import com.ruslan_website.travelblog.utils.http.service.EntryService;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
@@ -68,6 +71,10 @@ public class NewEntryActivity extends AppCompatActivity {
     @BindView(R.id.bImage) ImageButton bImage;
     @BindView(R.id.bSubmit) Button bSubmit;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    private Button[] changingButtons;
+
+    APIFactory apiFactory;
+    APIStrategy apiStrategy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +92,19 @@ public class NewEntryActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        changingButtons = new Button[]{bSubmit};
+
         if (mSPM == null) {
             mSPM = SharedPreferencesManagement.getInstance();
         }
+
+        apiFactory = new APIFactory( mSPM.getBackendOption() );
+        apiStrategy = apiFactory.getApiStrategy();
 
         name.setText(mSPM.getUsername());
         name.setTextSize(20);
         name.setGravity(Gravity.CENTER);
         name.setTypeface(null, Typeface.BOLD);
-    }
-
-    private OkHttpClient makeHttpClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
     }
 
     @OnClick(R.id.bImage)
@@ -244,16 +250,9 @@ public class NewEntryActivity extends AppCompatActivity {
             return;
         }
 
-        setProgressStatus(true, "Submitting ...", "Submitting");
-
-        OkHttpClient client = makeHttpClient();
-
-        entryService = new Retrofit.Builder()
-                .baseUrl( mSPM.getUrl() )
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(EntryService.class);
+        String toast = "Submitting ...";
+        String log = "Submitting";
+        UI.setProgressStatus(NewEntryActivity.this, true, progressBar, changingButtons, toast, log);
 
         File file = new File(filePath);
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -262,24 +261,21 @@ public class NewEntryActivity extends AppCompatActivity {
         RequestBody place1 = RequestBody.create(MediaType.parse("text/plain"), place.getText().toString() );
         RequestBody comments1 = RequestBody.create(MediaType.parse("text/plain"), comments.getText().toString() );
 
-        Call<ResponseBody> newEntryRequest = entryService.upload(
-                "application/json",
-                "Bearer " + mSPM.getAccessToken(),
-                image,
-                userId,
-                place1,
-                comments1
-        );
+        Call<ResponseBody> newEntryRequest = apiStrategy.uploadEntry(mSPM.getAccessToken(), image, userId, place1, comments1);
 
         newEntryRequest.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                setProgressStatus(false, "Submission Success.", "Create New Success: " + response.message());
+                String toast = "Submission Success.";
+                String log = "Create New Success: " + response.message();
+                UI.setProgressStatus(NewEntryActivity.this, false, progressBar, changingButtons, toast, log);
                 back();
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                setProgressStatus(false, "Submission Failure. Update your app.", "Create New Fail: " + t.getMessage());
+                String toast = "Submission Failure. Update your app.";
+                String log = "Create New Fail: " + t.getMessage();
+                UI.setProgressStatus(NewEntryActivity.this, false, progressBar, changingButtons, toast, log);
                 t.printStackTrace();
                 back();
             }
@@ -289,19 +285,5 @@ public class NewEntryActivity extends AppCompatActivity {
     private void back(){
         Intent intent = new Intent(NewEntryActivity.this, EntryActivity.class);
         startActivity(intent);
-    }
-
-    private void setProgressStatus(boolean isInProgress, String toast, String log){
-        if(isInProgress){
-            bSubmit.setText("Submitting ...");
-            bSubmit.setEnabled(false);
-            progressBar.setVisibility(View.VISIBLE);
-        }else{
-            bSubmit.setText("Submit");
-            bSubmit.setEnabled(true);
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-        Toast.makeText(NewEntryActivity.this, toast, Toast.LENGTH_LONG).show();
-        Log.i("NewEntriesMessage", log);
     }
 }

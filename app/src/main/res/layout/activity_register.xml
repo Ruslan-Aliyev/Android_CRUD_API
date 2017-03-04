@@ -49,8 +49,9 @@
         android:layout_height="60dp"
         android:text="Register"
         android:id="@+id/register"
-        android:layout_alignBottom="@+id/progressBar"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/bBackToLogin"
+        android:layout_alignBottom="@+id/bBackToLogin" />
 
     <ProgressBar
         android:visibility="invisible"

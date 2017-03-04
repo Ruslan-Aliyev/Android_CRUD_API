@@ -27,6 +27,9 @@ import android.widget.Toast;
 import com.ruslan_website.travelblog.utils.common.Image;
 import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.PathCombiner;
+import com.ruslan_website.travelblog.utils.common.UI;
+import com.ruslan_website.travelblog.utils.http.api.APIFactory;
+import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.Entry;
 import com.ruslan_website.travelblog.utils.http.service.EntryService;
 import com.ruslan_website.travelblog.utils.http.service.ImageService;
@@ -65,6 +68,10 @@ public class EntryActivity extends AppCompatActivity {
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    private Button[] changingButtons;
+
+    APIFactory apiFactory;
+    APIStrategy apiStrategy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +89,14 @@ public class EntryActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        changingButtons = new Button[]{bRefresh};
+
         if (mSPM == null) {
             mSPM = SharedPreferencesManagement.getInstance();
         }
+
+        apiFactory = new APIFactory( mSPM.getBackendOption() );
+        apiStrategy = apiFactory.getApiStrategy();
 
         greet.setText("Hi " + mSPM.getUsername());
         greet.setTextSize(30);
@@ -97,26 +109,13 @@ public class EntryActivity extends AppCompatActivity {
         }
     }
 
-    private OkHttpClient makeHttpClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
-    }
-
     private void obtainEntry() {
 
-        setProgressStatus(true, "Loading content", "Loading entries");
+        String toast = "Loading content";
+        String log = "Loading entries";
+        UI.setProgressStatus(EntryActivity.this, true, progressBar, changingButtons, toast, log);
 
-        OkHttpClient client = makeHttpClient();
-
-        entryService = new Retrofit.Builder()
-                .baseUrl( mSPM.getUrl() )
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(EntryService.class);
-
-        Call<List<Entry>> entryRequest = entryService.obtain("application/json", "Bearer " + mSPM.getAccessToken());
+        Call<List<Entry>> entryRequest = apiStrategy.obtainEntry( mSPM.getAccessToken() );
 
         entryRequest.enqueue(new Callback<List<Entry>>(){
             @Override
@@ -125,7 +124,9 @@ public class EntryActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<List<Entry>> call, Throwable t) {
-                setProgressStatus(false, "Update your app. App will close.", "Entry - Error: " + t.getMessage());
+                String toast = "Update your app. App will close.";
+                String log = "Entry - Error: " + t.getMessage();
+                UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
             }
         });
 
@@ -136,37 +137,34 @@ public class EntryActivity extends AppCompatActivity {
         for (final Entry entry: response.body()) {
 
             String[] imgUrlParts = entry.getImg_url().split("/");
-            final String imgName = imgUrlParts[imgUrlParts.length - 1];
+            final String imageName = imgUrlParts[imgUrlParts.length - 1];
 
-            OkHttpClient client = makeHttpClient();
-
-            imageService = new Retrofit.Builder()
-                    .baseUrl( mSPM.getUrl() )
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(ImageService.class);
-
-            Call<ResponseBody> imageRequest = imageService.download(imgName);
+            Call<ResponseBody> imageRequest = apiStrategy.obtainImage(imageName);
 
             imageRequest.enqueue(new Callback<ResponseBody>(){
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
-                        makeEntryList(response.body(), imgName, entry);
+                        makeEntryList(response.body(), imageName, entry);
                     } catch (Exception e) {
-                        setProgressStatus(false, "Update your app. App will close.", "makeEntryList - Error: " + e.getMessage());
+                        String toast = "Update your app. App will close.";
+                        String log = "makeEntryList - Error: " + e.getMessage();
+                        UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
                         e.printStackTrace();
                     }
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    setProgressStatus(false, "Update your app. App will close.", "Download Image Error" + t.getMessage());
+                    String toast = "Update your app. App will close.";
+                    String log = "Download Image Error" + t.getMessage();
+                    UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
                 }
             });
 
         }
-        setProgressStatus(false, "All contents loaded.", "All contents loaded");
+        String toast = "All contents loaded.";
+        String log = "All contents loaded";
+        UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
     }
 
     private void makeEntryList(ResponseBody body, String imgName, Entry entry) {
@@ -197,7 +195,6 @@ public class EntryActivity extends AppCompatActivity {
         ll.addView(line3);
 
         ImageView imageView = new ImageView(EntryActivity.this);
-        //String path = Environment.getExternalStoragePublicDirectory( PathCombiner.combine( Environment.DIRECTORY_PICTURES, mSPM.getAppImgDirName() ) ).getPath();
         String path = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         Log.i("ReadImgPath", path);
         File imgFile = new File(path, imgName);
@@ -211,11 +208,6 @@ public class EntryActivity extends AppCompatActivity {
     }
 
     private void downloadImage(ResponseBody body, String imgName) {
-//        String appImgDir = PathCombiner.combine(
-//                Environment.DIRECTORY_PICTURES,
-//                mSPM.getAppImgDirName()
-//        );
-//        File path = Environment.getExternalStoragePublicDirectory(appImgDir);
         File path = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         InputStream is = body.byteStream();
         Image.save(path, imgName, is);
@@ -230,19 +222,5 @@ public class EntryActivity extends AppCompatActivity {
     @OnClick(R.id.bRefresh)
     public void refresh(View view){
         init();
-    }
-
-    private void setProgressStatus(boolean isInProgress, String toast, String log){
-        if(isInProgress){
-            bRefresh.setText("Loading ...");
-            bRefresh.setEnabled(false);
-            progressBar.setVisibility(View.VISIBLE);
-        }else{
-            bRefresh.setText("Refresh");
-            bRefresh.setEnabled(true);
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-        Toast.makeText(EntryActivity.this, toast, Toast.LENGTH_SHORT).show();
-        Log.i("LoadEntriesMessage", log);
     }
 }

@@ -62,8 +62,19 @@ public class SharedPreferencesManagement {
         return this.mSP.getString("userPassword", null);
     }
 
-    public String getUrl() {
+    public void setBackendOption(String backendOption){
+        this.mPE.putString("backendOption", backendOption);
+        this.mPE.commit();
+    }
+    public String getBackendOption() {
+        return this.mSP.getString("backendOption", "laravel");
+    }
+
+    public String getLaravelUrl() {
         return this.mSP.getString("url", "http://ruslan-website.com/");
+    }
+    public String getCakeUrl() {
+        return this.mSP.getString("url", "");
     }
 
 
