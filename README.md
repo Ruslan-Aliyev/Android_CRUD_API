@@ -10,6 +10,14 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 | User email | guest@guest.com |
 | Password | gggggg |
 
+## Include:
+
+- Google SignIn
+
+- Facebook SignIn
+
+- GCM
+
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
 ## For Google Signin: SHA1 certificate fingerprint:
@@ -49,4 +57,6 @@ try {
 }
 ```
 
-### Facebook Developer website: https://developers.facebook.com/
+### Facebook Developer website:
+
+https://developers.facebook.com/

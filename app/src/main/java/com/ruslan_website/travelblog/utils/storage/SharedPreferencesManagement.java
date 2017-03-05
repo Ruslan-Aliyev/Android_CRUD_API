@@ -29,39 +29,7 @@ public class SharedPreferencesManagement {
     }
 
 
-
-    public void setClientId(int clientId) {
-        this.mPE.putInt("clientId", clientId);
-        this.mPE.commit();
-    }
-    public int getClientId() {
-        return this.mSP.getInt("clientId", 2);
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.mPE.putString("clientSecret", clientSecret);
-        this.mPE.commit();
-    }
-    public String getClientSecret() {
-        return this.mSP.getString("clientSecret", "9KHx3WW04RF0Gf2msS7dsKkPOpg6DNeH9uu7OvJh");
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.mPE.putString("userEmail", userEmail);
-        this.mPE.commit();
-    }
-    public String getUserEmail() {
-        return this.mSP.getString("userEmail", null);
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.mPE.putString("userPassword", userPassword);
-        this.mPE.commit();
-    }
-    public String getUserPassword() {
-        return this.mSP.getString("userPassword", null);
-    }
-
+    // App's BackEnd
     public void setBackendOption(String backendOption){
         this.mPE.putString("backendOption", backendOption);
         this.mPE.commit();
@@ -78,6 +46,7 @@ public class SharedPreferencesManagement {
     }
 
 
+    // App's Access Token
     public void setAccessToken(String accessToken) {
         this.mPE.putString("accessToken", accessToken);
         this.mPE.commit();
@@ -110,6 +79,24 @@ public class SharedPreferencesManagement {
         return this.mSP.getInt("tokenExpiry", 0);
     }
 
+
+    // User's info
+    public void setClientId(int clientId) {
+        this.mPE.putInt("clientId", clientId);
+        this.mPE.commit();
+    }
+    public int getClientId() {
+        return this.mSP.getInt("clientId", 2);
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.mPE.putString("clientSecret", clientSecret);
+        this.mPE.commit();
+    }
+    public String getClientSecret() {
+        return this.mSP.getString("clientSecret", "9KHx3WW04RF0Gf2msS7dsKkPOpg6DNeH9uu7OvJh");
+    }
+
     public int getUserId() {
         return this.mSP.getInt("userId", 1);
     }
@@ -126,10 +113,47 @@ public class SharedPreferencesManagement {
         return this.mSP.getString("username", null);
     }
 
-    public String getAppImgDirName() {
-        return this.mSP.getString("appImgDirName", SP_TAG);
+    public void setUserEmail(String userEmail) {
+        this.mPE.putString("userEmail", userEmail);
+        this.mPE.commit();
     }
-    public String getAppTempImgDirName() {
-        return this.mSP.getString("appTempImgDirName", PathCombiner.combine(SP_TAG, "temp") );
+    public String getUserEmail() {
+        return this.mSP.getString("userEmail", null);
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.mPE.putString("userPassword", userPassword);
+        this.mPE.commit();
+    }
+    public String getUserPassword() {
+        return this.mSP.getString("userPassword", null);
+    }
+
+
+    // Social Signins
+    public void setLoginChannel(String loginChannel) {
+        this.mPE.putString("loginChannel", loginChannel);
+        this.mPE.commit();
+    }
+    public String getLoginChannel() {
+        return this.mSP.getString("loginChannel", "normal");
+    }
+
+    public void setSocialAccessToken(String socialAccessToken) {
+        this.mPE.putString("socialAccessToken", socialAccessToken);
+        this.mPE.commit();
+    }
+    public String getSocialAccessToken() {
+        return this.mSP.getString("socialAccessToken", null);
+    }
+
+
+    // GCM
+    public void setGCMToken(String gcmToken) {
+        this.mPE.putString("gcmToken", gcmToken);
+        this.mPE.commit();
+    }
+    public String getGCMToken() {
+        return this.mSP.getString("gcmToken", null);
     }
 }

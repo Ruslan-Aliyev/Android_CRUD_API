@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -37,6 +38,7 @@ public class Facebook {
     public static final String TAG = "-FACEBOOK-";
     private Activity mActivity;
     private Callback mCallback;
+    private AccessToken fbAccessToken;
 
     private static Facebook facebook = new Facebook( );
 
@@ -90,7 +92,10 @@ public class Facebook {
     }
 
     private void getFbUserInfo(LoginResult loginResult){
-        GraphRequest request = GraphRequest.newMeRequest( loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+
+        fbAccessToken = loginResult.getAccessToken();
+
+        GraphRequest request = GraphRequest.newMeRequest( fbAccessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                 Message msg = Message.obtain();
@@ -152,7 +157,7 @@ public class Facebook {
                     break;
                 case FB_PIC_CODE:
                     isLoggedIn = true;
-                    mCallback.onSuccess(userInfo, (Bitmap)msg.obj);
+                    mCallback.onSuccess(userInfo, (Bitmap)msg.obj, fbAccessToken);
                     break;
             }
         }

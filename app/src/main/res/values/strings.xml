@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Travel Blog</string>
     <string name="facebook_app_id">599675933570009</string>
+    <string name="gcm_sender_id">80198869558</string>
 </resources>

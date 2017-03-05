@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ruslan_website.travelblog.utils.common.Auth;
 import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.UI;
+import com.ruslan_website.travelblog.utils.gcm.GCM;
 import com.ruslan_website.travelblog.utils.http.api.APIFactory;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.User;
@@ -40,8 +41,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferencesManagement mSPM;
 
-    APIFactory apiFactory;
-    APIStrategy apiStrategy;
+    private APIFactory apiFactory;
+    private APIStrategy apiStrategy;
+
+    private GCM gcm;
 
     private static final int PERMISSION_QUERY_CODE = 123;
     private String[] permissions;
@@ -86,9 +89,19 @@ public class LoginActivity extends AppCompatActivity {
 
         getPermissions(LoginActivity.this, permissions);
 
+        if (gcm == null) {
+            gcm = GCM.getInstance();
+        }
+        gcm.init(LoginActivity.this);
+
         if(!Network.isConnected()) {
             Toast.makeText(LoginActivity.this, "Travel Blog needs internet", Toast.LENGTH_LONG).show();
             return;
+        }
+
+        if(mSPM.getAccessToken() != null){
+            Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
+            startActivity(intent);
         }
     }
 

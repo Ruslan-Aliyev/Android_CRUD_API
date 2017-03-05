@@ -16,11 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.ruslan_website.travelblog.utils.TravelBlogApplication;
 import com.ruslan_website.travelblog.utils.common.Auth;
+import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.UI;
 import com.ruslan_website.travelblog.utils.http.api.APIFactory;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
@@ -124,6 +127,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             google = Google.getInstance();
         }
         google.init(this);
+
+        if(mSPM.getAccessToken() != null){
+            Intent intent = new Intent(RegisterActivity.this, EntryActivity.class);
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.bBackToLogin)
@@ -170,6 +178,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         String toast = "Registering ...";
         String log = "Register button pressed";
         UI.setProgressStatus(RegisterActivity.this, true, progressBar, changingButtons, toast, log);
+        fbSignin.setEnabled(false);
+        ggSignin.setEnabled(false);
 
         createNewUser(userName, userEmail, password, type, socialId);
     }
@@ -180,14 +190,16 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         String toast = "Signing into Facebook ...";
         String log = "Facebook SignIn button pressed";
         UI.setProgressStatus(RegisterActivity.this, true, progressBar, changingButtons, toast, log);
-
-        if(facebook.isLoggedIn()){
-            facebook.logout();
-        }
+        fbSignin.setEnabled(false);
+        ggSignin.setEnabled(false);
 
         facebook.signIn(RegisterActivity.this, new com.ruslan_website.travelblog.utils.social.facebook.Callback(){
             @Override
-            public void onSuccess(JSONObject result, Bitmap avatar) {
+            public void onSuccess(JSONObject result, Bitmap avatar, AccessToken accessToken) {
+
+                mSPM.setSocialAccessToken(accessToken.getToken());
+                Log.i("Facebook Token", mSPM.getSocialAccessToken());
+
                 processFacebookResult(result, avatar);
             }
             @Override
@@ -195,6 +207,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 String toast = "Update your app. App will close.";
                 String log = "Facebook signin error: " + errorMsg;
                 UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+                fbSignin.setEnabled(true);
+                ggSignin.setEnabled(true);
             }
         });
     }
@@ -205,6 +219,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             String toast = "Update your app. App will close.";
             String log = "Facebook result or avatar null";
             UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+            fbSignin.setEnabled(true);
+            ggSignin.setEnabled(true);
         }
 
         try {
@@ -218,6 +234,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             String toast = "Update your app. App will close.";
             String log = "Facebook result JSON parse problem: " + e.getMessage();
             UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+            fbSignin.setEnabled(true);
+            ggSignin.setEnabled(true);
             e.printStackTrace();
         }
     }
@@ -228,11 +246,16 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         String toast = "Signing into Google ...";
         String log = "Google SignIn button pressed";
         UI.setProgressStatus(RegisterActivity.this, true, progressBar, changingButtons, toast, log);
+        fbSignin.setEnabled(false);
+        ggSignin.setEnabled(false);
 
         google.googleSignIn(new com.ruslan_website.travelblog.utils.social.google.Callback(){
 
             @Override
             public void onSuccess(String socialId, String userName, String userEmail, String accessToken) {
+                mSPM.setSocialAccessToken(accessToken);
+                Log.i("Google Token", mSPM.getSocialAccessToken());
+
                 createNewUser(userName, userEmail, "random", "google", socialId);
             }
 
@@ -241,6 +264,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 String toast = "Update your app. App will close.";
                 String log = "Google signin err: " + errorMsg;
                 UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+                fbSignin.setEnabled(true);
+                ggSignin.setEnabled(true);
             }
         });
     }
@@ -267,6 +292,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     String toast = "Update your app. App will close.";
                     String log = "Backend create user response unsuccessful" + response.message();
                     UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+                    fbSignin.setEnabled(true);
+                    ggSignin.setEnabled(true);
                 }
 
             }
@@ -276,6 +303,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 String toast = "Update your app. App will close.";
                 String log = "Create user unsuccessful" + t.getMessage();
                 UI.setProgressStatus(RegisterActivity.this, false, progressBar, changingButtons, toast, log);
+                fbSignin.setEnabled(true);
+                ggSignin.setEnabled(true);
             }
         });
     }

@@ -98,6 +98,11 @@ public class NewEntryActivity extends AppCompatActivity {
             mSPM = SharedPreferencesManagement.getInstance();
         }
 
+        if(mSPM.getAccessToken() == null){
+            Intent intent = new Intent(NewEntryActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         apiFactory = new APIFactory( mSPM.getBackendOption() );
         apiStrategy = apiFactory.getApiStrategy();
 

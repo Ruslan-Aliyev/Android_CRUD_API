@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ruslan_website.travelblog.utils.TravelBlogApplication;
+import com.ruslan_website.travelblog.utils.common.Auth;
 import com.ruslan_website.travelblog.utils.common.Image;
 import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.PathCombiner;
@@ -34,6 +36,8 @@ import com.ruslan_website.travelblog.utils.http.model.Entry;
 import com.ruslan_website.travelblog.utils.http.service.EntryService;
 import com.ruslan_website.travelblog.utils.http.service.ImageService;
 import com.ruslan_website.travelblog.utils.http.service.TokenService;
+import com.ruslan_website.travelblog.utils.social.facebook.Facebook;
+import com.ruslan_website.travelblog.utils.social.google.Google;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
 
 import org.apache.commons.io.IOUtils;
@@ -65,6 +69,7 @@ public class EntryActivity extends AppCompatActivity {
     private ImageService imageService;
     @BindView(R.id.bNewEntry) Button bNewEntry;
     @BindView(R.id.bRefresh) Button bRefresh;
+    @BindView(R.id.bLogout) Button bLogout;
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
     @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -72,6 +77,9 @@ public class EntryActivity extends AppCompatActivity {
 
     APIFactory apiFactory;
     APIStrategy apiStrategy;
+
+    private Google google;
+    private Facebook facebook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +97,22 @@ public class EntryActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        changingButtons = new Button[]{bRefresh};
+        changingButtons = new Button[]{bRefresh, bLogout};
 
         if (mSPM == null) {
             mSPM = SharedPreferencesManagement.getInstance();
+        }
+
+        if(mSPM.getAccessToken() == null){
+            Intent intent = new Intent(EntryActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+        if(facebook == null){
+            facebook = Facebook.getInstance();
+        }
+        if(google == null){
+            google = Google.getInstance();
         }
 
         apiFactory = new APIFactory( mSPM.getBackendOption() );
@@ -222,5 +242,10 @@ public class EntryActivity extends AppCompatActivity {
     @OnClick(R.id.bRefresh)
     public void refresh(View view){
         init();
+    }
+
+    @OnClick(R.id.bLogout)
+    public void logout(View view){
+        Auth.logout(mSPM, facebook, google, EntryActivity.this);
     }
 }

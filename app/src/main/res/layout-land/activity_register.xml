@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ruslan_website.travelblog.RegisterActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/name"
+        android:hint="User Name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/bBackToLogin"
+        android:layout_alignEnd="@+id/email" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/email"
+        android:hint="E-Mail"
+        android:layout_below="@+id/name"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/fbSignin" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/pw1"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_below="@+id/email"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/ggSignin" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/pw2"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:layout_below="@+id/pw1"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/register"
+        android:layout_alignEnd="@+id/progressBar" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="Register"
+        android:id="@+id/register"
+        android:layout_alignTop="@+id/email"
+        android:layout_above="@+id/pw1"
+        android:layout_alignEnd="@+id/bBackToLogin"
+        android:layout_toEndOf="@+id/email" />
+
+    <ProgressBar
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:id="@+id/progressBar"
+        android:indeterminateDrawable="@drawable/progress"
+        android:layout_below="@+id/pw2"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fbSignin"
+        android:background="@drawable/fb"
+        android:layout_below="@+id/register"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/pw1"
+        android:layout_toEndOf="@+id/progressBar" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ggSignin"
+        android:background="@drawable/gg"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/pw2"
+        android:layout_below="@+id/pw1"
+        android:layout_alignBottom="@+id/pw2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:id="@+id/bBackToLogin"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/email" />
+
+</RelativeLayout>

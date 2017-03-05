@@ -7,8 +7,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.ruslan_website.travelblog.EntryActivity;
+import com.ruslan_website.travelblog.LoginActivity;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.User;
+import com.ruslan_website.travelblog.utils.social.facebook.Facebook;
+import com.ruslan_website.travelblog.utils.social.google.Google;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
 
 import org.json.JSONObject;
@@ -97,4 +100,38 @@ public class Auth {
         });
     }
 
+    public static void logout(SharedPreferencesManagement mSPM, Facebook facebook, Google google, Activity activity){
+
+        // check login channel
+        String loginChannel = mSPM.getLoginChannel();
+
+        switch(loginChannel){
+            case "facebook":
+                // Logout Facebook
+                if(facebook.isLoggedIn()){
+                    facebook.logout();
+                }
+
+                // unset social credentials
+                mSPM.setSocialAccessToken(null);
+                break;
+            case "google":
+                // Dis-associate Google
+                if(google.isLoggedIn()){
+                    google.googleDisassociate();
+                }
+
+                // unset social credentials
+                mSPM.setSocialAccessToken(null);
+                break;
+            default:
+                break;
+        }
+
+        // unset app's access token
+        mSPM.setAccessToken(null);
+
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+    }
 }

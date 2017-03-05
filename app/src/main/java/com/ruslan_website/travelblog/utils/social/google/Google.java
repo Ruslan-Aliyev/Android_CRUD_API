@@ -35,6 +35,7 @@ public class Google {
     private String userName;
     private String userEmail;
     private String accessToken;
+    private Boolean isLoggedIn = false;
 
     public Google() {
 
@@ -111,7 +112,10 @@ public class Google {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback( new ResultCallback<Status>() {
             @Override
             public void onResult(Status status) {
-                Log.i("Google SignOut", String.valueOf(status.isSuccess()) );
+                if(status.isSuccess()){
+                    isLoggedIn = false;
+                }
+                Log.i("Google SignOut", "-"+String.valueOf(status.isSuccess()) );
             }
         });
     }
@@ -120,7 +124,10 @@ public class Google {
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback( new ResultCallback<Status>() {
             @Override
             public void onResult(Status status) {
-                Log.i("Google Disassociate", String.valueOf(status.isSuccess()) );
+                if(status.isSuccess()){
+                    isLoggedIn = false;
+                }
+                Log.i("Google Disassociate", "-"+String.valueOf(status.isSuccess()) );
             }
         });
     }
@@ -135,6 +142,7 @@ public class Google {
     private void handleSignInResult(GoogleSignInResult result) {
 
         if (result.isSuccess()) { // Signed in successfully, authenticated
+            isLoggedIn = true;
             GoogleSignInAccount acct = result.getSignInAccount();
             userId = acct.getId();
             userEmail = acct.getEmail();
@@ -169,5 +177,9 @@ public class Google {
             Log.i("Google Access Token", accessToken);
             mCallback.onSuccess(userId, userName, userEmail, accessToken);
         }
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
     }
 }
