@@ -16,4 +16,5 @@ public interface APIStrategy {
     public Call<ResponseBody> obtainImage(String imageName);
     public Call<ResponseBody> uploadEntry(String accessToken, MultipartBody.Part image, RequestBody userId, RequestBody place, RequestBody comments);
     public Call<ResponseBody> createNewUser(String userName, String userEmail, String password, String type, String socialId);
+    public Call<ResponseBody> uploadGcmToken(String gcmToken);
 }

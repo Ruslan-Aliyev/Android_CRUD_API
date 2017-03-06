@@ -57,6 +57,11 @@ public class Cake implements APIStrategy {
         return null;
     }
 
+    @Override
+    public Call<ResponseBody> uploadGcmToken(String gcmToken) {
+        return null;
+    }
+
     private OkHttpClient makeHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

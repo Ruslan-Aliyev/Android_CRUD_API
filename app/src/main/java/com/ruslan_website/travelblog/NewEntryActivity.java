@@ -70,16 +70,30 @@ public class NewEntryActivity extends AppCompatActivity {
     @BindView(R.id.comments) EditText comments;
     @BindView(R.id.bImage) ImageButton bImage;
     @BindView(R.id.bSubmit) Button bSubmit;
+    @BindView(R.id.bMap) Button bMap;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     private Button[] changingButtons;
 
     APIFactory apiFactory;
     APIStrategy apiStrategy;
 
+    private String currentMapLocality;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                currentMapLocality = null;
+            } else {
+                currentMapLocality = extras.getString("currentLocality");
+            }
+        } else {
+            currentMapLocality = (String) savedInstanceState.getSerializable("currentLocality");
+        }
     }
 
     @Override
@@ -91,7 +105,6 @@ public class NewEntryActivity extends AppCompatActivity {
     private void init() {
 
         ButterKnife.bind(this);
-
         changingButtons = new Button[]{bSubmit};
 
         if (mSPM == null) {
@@ -110,6 +123,10 @@ public class NewEntryActivity extends AppCompatActivity {
         name.setTextSize(20);
         name.setGravity(Gravity.CENTER);
         name.setTypeface(null, Typeface.BOLD);
+
+        if(currentMapLocality != null){
+            place.setText(currentMapLocality);
+        }
     }
 
     @OnClick(R.id.bImage)
@@ -225,11 +242,6 @@ public class NewEntryActivity extends AppCompatActivity {
         byte[] bitmapdata = bytes.toByteArray();
         ByteArrayInputStream is = new ByteArrayInputStream(bitmapdata);
 
-//        String appTempImgDir = PathCombiner.combine(
-//                Environment.DIRECTORY_PICTURES,
-//                mSPM.getAppTempImgDirName()
-//        );
-//        File photoPath = Environment.getExternalStoragePublicDirectory(appTempImgDir);
         File photoPath = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp");
         String photoName = System.currentTimeMillis() + ".png";
         File destination = new File(photoPath, photoName);
@@ -237,6 +249,12 @@ public class NewEntryActivity extends AppCompatActivity {
         Image.save(photoPath, photoName, is);
         bImage.setImageBitmap(bitmap);
         filePath = destination.getPath();
+    }
+
+    @OnClick(R.id.bMap)
+    public void toMap(View view){
+        Intent intent = new Intent(NewEntryActivity.this, MapActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.bSubmit)

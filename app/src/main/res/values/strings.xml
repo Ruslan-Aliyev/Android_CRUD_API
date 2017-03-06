@@ -2,4 +2,5 @@
     <string name="app_name">Travel Blog</string>
     <string name="facebook_app_id">599675933570009</string>
     <string name="gcm_sender_id">80198869558</string>
+    <string name="map_api_key">AIzaSyBh4itw38GE3FRXgG-r0b9od5IDNJNyNlg</string>
 </resources>

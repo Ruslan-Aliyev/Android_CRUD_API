@@ -60,4 +60,12 @@
         android:layout_alignEnd="@+id/bImage"
         android:layout_toEndOf="@+id/bSubmit" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:id="@+id/bMap"
+        android:layout_below="@+id/comments"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

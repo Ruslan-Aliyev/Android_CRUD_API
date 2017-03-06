@@ -23,7 +23,7 @@
         android:id="@+id/place"
         android:hint="Place"
         android:layout_below="@+id/name"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/bImage" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -59,5 +59,14 @@
         android:layout_alignBottom="@+id/bSubmit"
         android:layout_alignEnd="@+id/bImage"
         android:layout_toEndOf="@+id/bSubmit" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:id="@+id/bMap"
+        android:layout_toEndOf="@+id/place"
+        android:layout_below="@+id/name"
+        android:layout_above="@+id/comments" />
 
 </RelativeLayout>

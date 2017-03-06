@@ -4,6 +4,7 @@ import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.Entry;
 import com.ruslan_website.travelblog.utils.http.model.User;
 import com.ruslan_website.travelblog.utils.http.service.EntryService;
+import com.ruslan_website.travelblog.utils.http.service.GCMService;
 import com.ruslan_website.travelblog.utils.http.service.ImageService;
 import com.ruslan_website.travelblog.utils.http.service.TokenService;
 import com.ruslan_website.travelblog.utils.http.service.UserService;
@@ -133,6 +134,23 @@ public class Laravel implements APIStrategy {
         Call<ResponseBody> newUserRequest = userService.create(userName, userEmail, password, type, socialId);
 
         return newUserRequest;
+    }
+
+    @Override
+    public Call<ResponseBody> uploadGcmToken(String gcmToken) {
+
+        OkHttpClient client = makeHttpClient();
+
+        GCMService gcmService = new Retrofit.Builder()
+                .baseUrl( url )
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(GCMService.class);
+
+        Call<ResponseBody> uploadGcmTokenRequest = gcmService.uploadToken(gcmToken);
+
+        return uploadGcmTokenRequest;
     }
 
     private OkHttpClient makeHttpClient() {

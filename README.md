@@ -12,27 +12,15 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
 ## Include:
 
-- Google SignIn
-
 - Facebook SignIn
+
+- Google SignIn
 
 - GCM
 
+- Google Maps
+
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
-
-## For Google Signin: SHA1 certificate fingerprint:
-
-Method 1: in CLI: `keytool -exportcert -list -v -keystore ~/.android/debug.keystore`
-
-Method 2: in Android Studio:
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/ShaCertFingerprint.png)
-
-### Google Developer websites:
-
-https://console.developers.google.com/
-
-https://developers.google.com/mobile/add
 
 ## For Facebook Signin: Sha Key Hash:
 
@@ -60,3 +48,37 @@ try {
 ### Facebook Developer website:
 
 https://developers.facebook.com/
+
+## For Google Signin: SHA1 certificate fingerprint:
+
+Method 1: in CLI: `keytool -exportcert -list -v -keystore ~/.android/debug.keystore`
+
+Method 2: in Android Studio:
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/ShaCertFingerprint.png)
+
+### Google Developer websites:
+
+https://console.developers.google.com/
+
+https://developers.google.com/mobile/add
+
+## GCM:
+
+`POST https://gcm-http.googleapis.com/gcm/send`
+
+```
+Content-Type:application/json
+Authorization:key=(API Key)
+
+{
+  "registration_ids" : ["(Registration Token)"],
+  "data" : {
+    "message":"{xxx:yyy}"
+  }
+}
+```
+
+## Google Map:
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/MapApi.png)

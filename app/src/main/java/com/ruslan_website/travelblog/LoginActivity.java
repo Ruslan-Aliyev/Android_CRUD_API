@@ -84,7 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
         permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-                //,Manifest.permission.WRITE_CONTACTS
+                ,Manifest.permission.ACCESS_COARSE_LOCATION
+                ,Manifest.permission.ACCESS_FINE_LOCATION
         };
 
         getPermissions(LoginActivity.this, permissions);
@@ -94,10 +95,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         gcm.init(LoginActivity.this);
 
-        if(!Network.isConnected()) {
-            Toast.makeText(LoginActivity.this, "Travel Blog needs internet", Toast.LENGTH_LONG).show();
-            return;
-        }
+//        if(!Network.isConnected()) {
+//            Toast.makeText(LoginActivity.this, "Travel Blog needs internet", Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         if(mSPM.getAccessToken() != null){
             Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
@@ -113,13 +114,13 @@ public class LoginActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(activity, new String[]{permissions[i]}, PERMISSION_QUERY_CODE);
                     return;
                 } else {
-                    Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
                 }
             }else{
                 if (ContextCompat.checkSelfPermission(activity.getBaseContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -130,9 +131,9 @@ public class LoginActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
         if(requestCode == PERMISSION_QUERY_CODE){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "Required permissions obtained", Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(LoginActivity.this, "Fail to get required permissions", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "Fail to get required permissions", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
