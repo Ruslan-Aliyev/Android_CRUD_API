@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,8 +50,8 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
         LocationListener, OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
 
-    @BindView(R.id.bGetLocation)
-    Button bGetLocation;
+    @BindView(R.id.bGetLocation) Button bGetLocation;
+    @BindView(R.id.bCurrentLocation) Button bCurrentLocation;
 
     // In case of fragment
     // private GoogleMap googleMap;
@@ -60,28 +61,29 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private LatLng latLng;
-    private Marker mCurrLocation;
+    private Marker mCurrentMarker;
+    private Location mCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // ********** FULL SCREEN **********
-        // hide title & notification bar. Can also be done in Manifest
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // hide action bar etc. If hide nav bar -> hide status bar -> hide action bar.
-        if (Build.VERSION.SDK_INT < 16) {
-            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //SYSTEM_UI_FLAG_HIDE_NAVIGATION hide nav bar
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN; //SYSTEM_UI_FLAG_FULLSCREEN Android 4.1+ hide status bar
-            decorView.setSystemUiVisibility(uiOptions);
-            ActionBar actionBar = getActionBar(); //if inherit android.support.v7.app.ActionBarActivity, use getSupportActionBar()
-            if (actionBar != null) {
-                actionBar.hide();
-            }
-        }
+//        // hide title & notification bar. Can also be done in Manifest
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        // hide action bar etc. If hide nav bar -> hide status bar -> hide action bar.
+//        if (Build.VERSION.SDK_INT < 16) {
+//            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        } else {
+//            View decorView = getWindow().getDecorView();
+//            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //SYSTEM_UI_FLAG_HIDE_NAVIGATION hide nav bar
+//                    | View.SYSTEM_UI_FLAG_FULLSCREEN; //SYSTEM_UI_FLAG_FULLSCREEN Android 4.1+ hide status bar
+//            decorView.setSystemUiVisibility(uiOptions);
+//            ActionBar actionBar = getActionBar(); //if inherit android.support.v7.app.ActionBarActivity, use getSupportActionBar()
+//            if (actionBar != null) {
+//                actionBar.hide();
+//            }
+//        }
         // ********** FULL SCREEN **********
 
         setContentView(R.layout.activity_map);
@@ -122,6 +124,21 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
         map.setMyLocationEnabled(true);
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomGesturesEnabled(true);
+
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Location selectedLocation = new Location(LocationManager.GPS_PROVIDER);
+                selectedLocation.setLatitude(latLng.latitude);
+                selectedLocation.setLongitude(latLng.longitude);
+
+                if (mCurrentMarker != null) {
+                    mCurrentMarker.remove();
+                }
+                placeMarker(selectedLocation);
+            }
+        });
+
         buildGoogleApiClient();
         mGoogleApiClient.connect();
     }
@@ -198,24 +215,25 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
 //		Log.i("Location Update", "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
 
         // Remove previous location marker and add new one at current position
-		if (mCurrLocation != null) {
-			mCurrLocation.remove();
-		}
-		placeMarker(location);
+//		if (mCurrentMarker != null) {
+//            mCurrentMarker.remove();
+//		}
+//		placeMarker(location);
 
         // If you only need one location, unregister the listener
 //		LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
-        animateCamera(location);
+//        animateCamera(location);
+        mCurrentLocation = location;
     }
 
     private void placeMarker(Location location){
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocation = map.addMarker(markerOptions);
+        markerOptions.title("Selected Position");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        mCurrentMarker = map.addMarker(markerOptions);
     }
     private void animateCamera(Location location){
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
@@ -228,9 +246,29 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    @OnClick(R.id.bCurrentLocation)
+    public void pinCurrentLocation(View view){
+        animateCamera(mCurrentLocation);
+
+        if (mCurrentMarker != null) {
+            mCurrentMarker.remove();
+        }
+        placeMarker(mCurrentLocation);
+    }
+
     @OnClick(R.id.bGetLocation)
     public void getLocation(View view){
+        if(latLng == null) {
+            return;
+        }
+
         String currentLocality = getAddress(latLng.latitude, latLng.longitude);
+
+        if(currentLocality == null){
+            Toast.makeText(MapActivity.this, "Pick an actual town/city!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Log.i("Current Locality", currentLocality);
 
         Intent intent = new Intent(MapActivity.this, NewEntryActivity.class);
