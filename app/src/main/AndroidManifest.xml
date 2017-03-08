@@ -48,17 +48,23 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<data android:scheme="open.ruslan_website.travelblog.in.android" />-->
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".EntryActivity" />
         <activity android:name=".NewEntryActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".MapActivity" />
+        <activity android:name=".ContactActivity" />
+        <activity android:name=".WebLinkActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app.travelblog" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -89,8 +95,6 @@
             android:name=".utils.gcm.RegistrationIntentService"
             android:exported="false" />
 
-        <activity android:name=".MapActivity" />
-        <activity android:name=".ContactActivity"></activity>
     </application>
 
 </manifest>

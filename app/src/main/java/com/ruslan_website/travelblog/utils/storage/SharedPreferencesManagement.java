@@ -177,7 +177,7 @@ public class SharedPreferencesManagement {
         this.mPE.commit();
     }
     public String getEmailServerPassword() {
-        return this.mSP.getString("emailServerPassword", "***");
+        return this.mSP.getString("emailServerPassword", "Berkekhan1!");
     }
 
     public String getContactEmail() {

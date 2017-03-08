@@ -85,14 +85,6 @@ public class LoginActivity extends AppCompatActivity implements SurfaceHolder.Ca
         SurfaceHolder holder = sv.getHolder();
         holder.addCallback(this);
         svMp = MediaPlayer.create(this, R.raw.flight);
-
-        Uri data = getIntent().getData();
-        if(data != null) {
-            List<String> params = data.getPathSegments();
-            String first = params.get(0);
-            String second = params.get(1);
-            Log.i("Param", first + second);
-        }
     }
 
     @Override
