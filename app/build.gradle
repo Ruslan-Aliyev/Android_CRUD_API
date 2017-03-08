@@ -51,5 +51,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.2.0'
     compile 'com.google.android.gms:play-services-gcm:10.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'javax.mail:mail:1.4.7'
 }
 apply plugin: 'com.google.gms.google-services'

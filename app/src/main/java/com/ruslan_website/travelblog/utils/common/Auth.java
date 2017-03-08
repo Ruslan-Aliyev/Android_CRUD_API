@@ -108,18 +108,18 @@ public class Auth {
         switch(loginChannel){
             case "facebook":
                 // Logout Facebook
-                if(facebook.isLoggedIn()){
-                    facebook.logout();
-                }
+//                if(facebook.isLoggedIn()){
+//                    facebook.logout();
+//                }
 
                 // unset social credentials
                 mSPM.setSocialAccessToken(null);
                 break;
             case "google":
                 // Dis-associate Google
-                if(google.isLoggedIn()){
-                    google.googleDisassociate();
-                }
+//                if(google.isLoggedIn()){
+//                    google.googleDisassociate();
+//                }
 
                 // unset social credentials
                 mSPM.setSocialAccessToken(null);

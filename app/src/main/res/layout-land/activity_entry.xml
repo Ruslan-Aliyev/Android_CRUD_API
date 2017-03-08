@@ -70,4 +70,12 @@
         android:layout_below="@+id/greet"
         android:layout_toEndOf="@+id/bRefresh" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact"
+        android:id="@+id/bContact"
+        android:layout_alignBottom="@+id/bLogout"
+        android:layout_toEndOf="@+id/bLogout" />
+
 </RelativeLayout>

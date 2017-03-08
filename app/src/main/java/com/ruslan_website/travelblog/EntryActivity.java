@@ -69,6 +69,7 @@ public class EntryActivity extends AppCompatActivity {
     private ImageService imageService;
     @BindView(R.id.bNewEntry) Button bNewEntry;
     @BindView(R.id.bRefresh) Button bRefresh;
+    @BindView(R.id.bContact) Button bContact;
     @BindView(R.id.bLogout) Button bLogout;
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
@@ -97,7 +98,7 @@ public class EntryActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        changingButtons = new Button[]{bRefresh, bLogout};
+        changingButtons = new Button[]{bRefresh, bLogout, bContact};
 
         if (mSPM == null) {
             mSPM = SharedPreferencesManagement.getInstance();
@@ -247,5 +248,11 @@ public class EntryActivity extends AppCompatActivity {
     @OnClick(R.id.bLogout)
     public void logout(View view){
         Auth.logout(mSPM, facebook, google, EntryActivity.this);
+    }
+
+    @OnClick(R.id.bContact)
+    public void toContactPage(View view){
+        Intent intent = new Intent(EntryActivity.this, ContactActivity.class);
+        startActivity(intent);
     }
 }

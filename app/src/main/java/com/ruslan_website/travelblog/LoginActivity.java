@@ -1,21 +1,31 @@
 package com.ruslan_website.travelblog;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.ruslan_website.travelblog.utils.AnimatorUtil;
 import com.ruslan_website.travelblog.utils.common.Auth;
 import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.UI;
@@ -24,10 +34,12 @@ import com.ruslan_website.travelblog.utils.http.api.APIFactory;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.User;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
+import com.ruslan_website.travelblog.utils.view.RoundVideo;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements SurfaceHolder.Callback, Animator.AnimatorListener {
 
     private SharedPreferencesManagement mSPM;
 
@@ -49,17 +61,38 @@ public class LoginActivity extends AppCompatActivity {
     private static final int PERMISSION_QUERY_CODE = 123;
     private String[] permissions;
 
+    @BindView(R.id.root) RelativeLayout root;
     @BindView(R.id.userEmail) EditText userEmail;
     @BindView(R.id.userPassword)  EditText userPassword;
     @BindView(R.id.bRegister) Button bRegister;
     @BindView(R.id.bLogin) Button bLogin;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.plane) ImageView plane;
     private Button[] changingButtons;
+
+    private RoundVideo sv;
+    private MediaPlayer svMp;
+
+    private AnimatorUtil animatorUtil;
+    private ObjectAnimator bounce1, bounce2, bounce3, planeMoveX, planeMoveY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sv = (RoundVideo) findViewById(R.id.sv);
+        SurfaceHolder holder = sv.getHolder();
+        holder.addCallback(this);
+        svMp = MediaPlayer.create(this, R.raw.flight);
+
+        Uri data = getIntent().getData();
+        if(data != null) {
+            List<String> params = data.getPathSegments();
+            String first = params.get(0);
+            String second = params.get(1);
+            Log.i("Param", first + second);
+        }
     }
 
     @Override
@@ -71,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
     private void init() {
 
         ButterKnife.bind(this);
+
+        // String imagePath = getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath() + "/pictures/";
+        // plane.setImageBitmap(BitmapFactory.decodeFile(new File(imagePath + "plane.jpg").getAbsolutePath()));
 
         changingButtons = new Button[]{bRegister, bLogin};
 
@@ -90,15 +126,12 @@ public class LoginActivity extends AppCompatActivity {
 
         getPermissions(LoginActivity.this, permissions);
 
+        animate();
+
         if (gcm == null) {
             gcm = GCM.getInstance();
         }
         gcm.init(LoginActivity.this);
-
-//        if(!Network.isConnected()) {
-//            Toast.makeText(LoginActivity.this, "Travel Blog needs internet", Toast.LENGTH_LONG).show();
-//            return;
-//        }
 
         if(mSPM.getAccessToken() != null){
             Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
@@ -168,5 +201,99 @@ public class LoginActivity extends AppCompatActivity {
     public void toRegister(View view){
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        svMp.setDisplay(holder);
+        svMp.setVolume(0,0);
+        svMp.setLooping(true);
+        svMp.start();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    private void animate() {
+
+        if(animatorUtil == null) {
+            animatorUtil = AnimatorUtil.getInstance();
+        }
+
+//        root.post(new Runnable(){
+//            @Override
+//            public void run() {
+//                // animation codes
+//            }
+//        });
+
+        plane.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        // Don't forget to remove your listener when you are done with it.
+                        plane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        // Bounce scales are for the scale animation of Welcome Screen's blue round start button
+                        float BOUNCE_SCALE_1 = 0;
+                        float BOUNCE_SCALE_2 = 1.1f;
+                        float BOUNCE_SCALE_3 = 0.9f;
+                        float BOUNCE_SCALE_4 = 1;
+
+                        bounce1 = animatorUtil.scale(plane, BOUNCE_SCALE_1, BOUNCE_SCALE_2, BOUNCE_SCALE_1, BOUNCE_SCALE_2, 500);
+                        bounce2 = animatorUtil.scale(plane, BOUNCE_SCALE_2, BOUNCE_SCALE_3, BOUNCE_SCALE_2, BOUNCE_SCALE_3, 150);
+                        bounce3 = animatorUtil.scale(plane, BOUNCE_SCALE_3, BOUNCE_SCALE_4, BOUNCE_SCALE_3, BOUNCE_SCALE_4, 150);
+
+                        AnimatorSet bounce = new AnimatorSet();
+                        bounce.play(bounce1).before(bounce2);
+                        bounce.play(bounce3).after(bounce2);
+
+                        float initX = (float) plane.getX();
+                        float initY = (float) plane.getY();
+                        float finalX = 0;
+                        float finalY = initY - 300;
+                        planeMoveX = animatorUtil.move(plane, "x", initX, finalX, 2000);
+                        planeMoveY = animatorUtil.move(plane, "y", initY, finalY, 2000);
+                        planeMoveX.addListener(LoginActivity.this);
+                        planeMoveY.addListener(LoginActivity.this);
+
+                        AnimatorSet welcomeAnimations = new AnimatorSet();
+                        welcomeAnimations.play(planeMoveX).after(bounce);
+                        welcomeAnimations.play(planeMoveX).with(planeMoveY);
+                        welcomeAnimations.start();
+                    }
+                });
+    }
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+        if(animation.equals(planeMoveY)){
+            plane.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        if(animation.equals(planeMoveY)){
+            plane.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
     }
 }

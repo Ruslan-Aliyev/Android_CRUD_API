@@ -156,4 +156,31 @@ public class SharedPreferencesManagement {
     public String getGCMToken() {
         return this.mSP.getString("gcmToken", null);
     }
+
+    // Contact
+    public String getPHPContactFormUrl() {
+        return this.mSP.getString("phpContactFormUrl", "http://ruslan-website.com/upload/php/contact.html");
+    }
+    public String getAjaxContactFormUrl() {
+        return this.mSP.getString("ajaxContactFormUrl", "http://ruslan-website.com/upload/ajax/contact.html");
+    }
+
+    public void setEmailServerUsername(String emailServerUsername) {
+        this.mPE.putString("emailServerUsername", emailServerUsername);
+        this.mPE.commit();
+    }
+    public String getEmailServerUsername() {
+        return this.mSP.getString("emailServerUsername", "steppe.ego@gmail.com");
+    }
+    public void setEmailServerPassword(String emailServerPassword) {
+        this.mPE.putString("emailServerPassword", emailServerPassword);
+        this.mPE.commit();
+    }
+    public String getEmailServerPassword() {
+        return this.mSP.getString("emailServerPassword", "Berkekhan1!");
+    }
+
+    public String getContactEmail() {
+        return this.mSP.getString("contactEmail", "ruslan_aliyev_@hotmail.com");
+    }
 }

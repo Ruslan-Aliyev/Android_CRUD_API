@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text=""
-        android:id="@+id/greet"/>
+        android:id="@+id/greet"
+        android:layout_toStartOf="@+id/progressBar"
+        android:layout_alignEnd="@+id/bContact" />
 
     <Button
         android:layout_width="wrap_content"
@@ -34,10 +36,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/bNewEntry">
+        android:layout_below="@+id/bNewEntry"
+        android:layout_above="@+id/bLogout">
 
         <LinearLayout
             android:orientation="vertical"
@@ -67,7 +70,15 @@
         android:layout_height="wrap_content"
         android:text="Logout"
         android:id="@+id/bLogout"
-        android:layout_below="@+id/greet"
-        android:layout_toEndOf="@+id/bRefresh" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact"
+        android:id="@+id/bContact"
+        android:layout_alignTop="@+id/bLogout"
+        android:layout_alignEnd="@+id/scrollView" />
 
 </RelativeLayout>

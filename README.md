@@ -12,6 +12,8 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
 ## Include:
 
+- Retrofit2, REST, Download image, upload form and file
+
 - Facebook SignIn
 
 - Google SignIn
@@ -19,6 +21,14 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 - GCM
 
 - Google Maps
+
+- View elements' customization
+
+- WebView handle phone, email, upload, JSInterface
+
+- Emailing via both UA and JavaMail
+
+- Object Animator
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
@@ -82,3 +92,7 @@ Authorization:key=(API Key)
 ## Google Map:
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/MapApi.png)
+
+## WebView Contact Forms
+
+https://github.com/atabegruslan/Upload

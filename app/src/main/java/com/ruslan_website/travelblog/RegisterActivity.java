@@ -274,6 +274,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         Log.i("NewUserCheck: ", userName + " " + userEmail + " " + password + " " + type + " " + socialId);
 
+        mSPM.setUsername(userName);
+        mSPM.setUserEmail(userEmail);
+        mSPM.setLoginChannel(type);
+
         Call<ResponseBody> newUserRequest = apiStrategy.createNewUser(userName, userEmail, password, type, socialId);
 
         newUserRequest.enqueue(new retrofit2.Callback<ResponseBody>() {

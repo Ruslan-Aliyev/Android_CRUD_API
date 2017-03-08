@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceView;
 
 public class RoundVideo extends SurfaceView {
 
     private Path clipPath;
-    private final int DIMENSION = 155; // square
+    private final int DIMENSION = 200; // square, 200px
 
     public RoundVideo(Context context) {
         super(context);
@@ -18,11 +19,13 @@ public class RoundVideo extends SurfaceView {
 
     public RoundVideo(Context context, AttributeSet attrs) {
         super(context, attrs);
+        //Log.i("AA", attrs.getAttributeValue("android", "layout_width"));
         init();
     }
 
     public RoundVideo(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        //Log.i("AAA", attrs.getAttributeValue("android", "layout_width"));
         init();
     }
 

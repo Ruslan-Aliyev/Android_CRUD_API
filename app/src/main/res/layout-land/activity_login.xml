@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/root"
     tools:context="com.ruslan_website.travelblog.LoginActivity">
 
     <EditText
@@ -33,7 +34,7 @@
         android:text="Login"
         android:id="@+id/bLogin"
         android:layout_below="@+id/userPassword"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/bRegister" />
 
     <ProgressBar
         android:visibility="invisible"
@@ -53,5 +54,20 @@
         android:id="@+id/bRegister"
         android:layout_alignTop="@+id/bLogin"
         android:layout_alignParentStart="true" />
+
+    <com.ruslan_website.travelblog.utils.view.RoundVideo
+        android:id="@+id/sv"
+        android:layout_width="400px"
+        android:layout_height="400px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:id="@+id/plane"
+        android:src="@drawable/plane"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/userPassword" />
 
 </RelativeLayout>
