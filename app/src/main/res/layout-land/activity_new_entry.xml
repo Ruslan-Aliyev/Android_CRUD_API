@@ -72,4 +72,12 @@
         android:layout_below="@+id/comments"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voice"
+        android:id="@+id/bVoice"
+        android:layout_below="@+id/bMap"
+        android:layout_alignEnd="@+id/bMap" />
+
 </RelativeLayout>

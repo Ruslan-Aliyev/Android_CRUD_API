@@ -23,7 +23,7 @@
         android:id="@+id/place"
         android:hint="Place"
         android:layout_below="@+id/name"
-        android:layout_alignEnd="@+id/bImage" />
+        android:layout_toStartOf="@+id/bVoice" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
         android:id="@+id/comments"
         android:hint="Comments"
         android:layout_below="@+id/place"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/bMap" />
 
     <ImageButton
         android:layout_width="150dp"
@@ -68,8 +68,15 @@
         android:layout_height="wrap_content"
         android:text="Map"
         android:id="@+id/bMap"
-        android:layout_toEndOf="@+id/place"
+        android:layout_alignTop="@+id/place"
+        android:layout_alignEnd="@+id/name" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voice"
+        android:id="@+id/bVoice"
         android:layout_below="@+id/name"
-        android:layout_above="@+id/comments" />
+        android:layout_toStartOf="@+id/bMap" />
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,44 +27,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruslan_website.travelblog.utils.common.Image;
-import com.ruslan_website.travelblog.utils.common.PathCombiner;
 import com.ruslan_website.travelblog.utils.common.UI;
 import com.ruslan_website.travelblog.utils.http.api.APIFactory;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
-import com.ruslan_website.travelblog.utils.http.model.Entry;
-import com.ruslan_website.travelblog.utils.http.service.EntryService;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewEntryActivity extends AppCompatActivity {
 
     private SharedPreferencesManagement mSPM;
-    private EntryService entryService;
     private static final int REQUEST_CAMERA = 5000;
     private static final int SELECT_FILE = 5001;
+    private static final int VOICE_CODE = 123;
     String filePath;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.place) EditText place;
@@ -72,11 +62,10 @@ public class NewEntryActivity extends AppCompatActivity {
     @BindView(R.id.bSubmit) Button bSubmit;
     @BindView(R.id.bMap) Button bMap;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.bVoice) Button bVoice;
     private Button[] changingButtons;
-
-    APIFactory apiFactory;
-    APIStrategy apiStrategy;
-
+    private APIFactory apiFactory;
+    private APIStrategy apiStrategy;
     private String currentMapLocality;
 
     @Override
@@ -190,10 +179,16 @@ public class NewEntryActivity extends AppCompatActivity {
         // or the image we selected from gallery.
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
+            if (requestCode == SELECT_FILE) {
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
+            }else if (requestCode == REQUEST_CAMERA) {
                 onCaptureImageResult(data);
+            }else if (requestCode == VOICE_CODE){
+                ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if(!results.isEmpty()) {
+                    place.setText(results.get(0));
+                }
+            }
         }
     }
 
@@ -255,6 +250,14 @@ public class NewEntryActivity extends AppCompatActivity {
     public void toMap(View view){
         Intent intent = new Intent(NewEntryActivity.this, MapActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.bVoice)
+    public void voiceInput(View view){
+        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Now");
+        startActivityForResult(i, VOICE_CODE);
     }
 
     @OnClick(R.id.bSubmit)

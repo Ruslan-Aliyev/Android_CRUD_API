@@ -30,6 +30,10 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
 - Object Animator
 
+- Speech <-> Text
+
+- SQLite
+
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
 ## For Facebook Signin: Sha Key Hash:

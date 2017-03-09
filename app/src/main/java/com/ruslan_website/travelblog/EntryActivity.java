@@ -30,6 +30,7 @@ import com.ruslan_website.travelblog.utils.common.Image;
 import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.PathCombiner;
 import com.ruslan_website.travelblog.utils.common.UI;
+import com.ruslan_website.travelblog.utils.database.EntryDAO;
 import com.ruslan_website.travelblog.utils.http.api.APIFactory;
 import com.ruslan_website.travelblog.utils.http.api.APIStrategy;
 import com.ruslan_website.travelblog.utils.http.model.Entry;
@@ -81,6 +82,9 @@ public class EntryActivity extends AppCompatActivity {
 
     private Google google;
     private Facebook facebook;
+
+    private EntryDAO db;
+    private int entryTableKey = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +187,7 @@ public class EntryActivity extends AppCompatActivity {
             });
 
         }
+
         String toast = "All contents loaded.";
         String log = "All contents loaded";
         UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
@@ -224,6 +229,28 @@ public class EntryActivity extends AppCompatActivity {
         imageView.setLayoutParams(new ActionBarOverlayLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         imageView.setPadding(0, 0, 0, 100);
         ll.addView(imageView);
+
+
+        db = new EntryDAO(this);
+        db.addEntry(new com.ruslan_website.travelblog.utils.database.Entry(
+                entryTableKey,
+                entry.getUser().getName(),
+                entry.getTime(),
+                entry.getPlace(),
+                entry.getComments(),
+                imgFile.getAbsolutePath()
+        ));
+        entryTableKey++;
+
+        List<com.ruslan_website.travelblog.utils.database.Entry> dbentries = db.getAllEntries();
+        for (com.ruslan_website.travelblog.utils.database.Entry en : dbentries) {
+            String log = "Id: "+en.getId()+" ,Name: " + en.getUsername()
+                    + " ,Place: " + en.getPlace()
+                    + ", Time: " + en.getPlace() + ",Date: " + en.getDate()
+                    + ",Comments: " + en.getComments() + ",ImgUrl: "+en.getImageUrl();
+            Log.i("DBTEST: ", log);
+        }
+
 
         entries.addView(ll);
     }

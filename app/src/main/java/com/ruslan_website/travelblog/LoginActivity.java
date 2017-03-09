@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +78,8 @@ public class LoginActivity extends AppCompatActivity implements SurfaceHolder.Ca
     private AnimatorUtil animatorUtil;
     private ObjectAnimator bounce1, bounce2, bounce3, planeMoveX, planeMoveY;
 
+    private TextToSpeech tts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,15 @@ public class LoginActivity extends AppCompatActivity implements SurfaceHolder.Ca
         SurfaceHolder holder = sv.getHolder();
         holder.addCallback(this);
         svMp = MediaPlayer.create(this, R.raw.flight);
+
+        tts = new TextToSpeech(LoginActivity.this, new TextToSpeech.OnInitListener(){
+            public void onInit(int status){
+                if(status != TextToSpeech.ERROR){
+                    tts.setLanguage(Locale.US);
+                    tts.speak("Welcome to travel blog", TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+        });
     }
 
     @Override
