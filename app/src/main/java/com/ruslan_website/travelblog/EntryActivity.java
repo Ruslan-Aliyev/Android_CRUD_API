@@ -242,14 +242,14 @@ public class EntryActivity extends AppCompatActivity {
         ));
         entryTableKey++;
 
-        List<com.ruslan_website.travelblog.utils.database.Entry> dbentries = db.getAllEntries();
-        for (com.ruslan_website.travelblog.utils.database.Entry en : dbentries) {
-            String log = "Id: "+en.getId()+" ,Name: " + en.getUsername()
-                    + " ,Place: " + en.getPlace()
-                    + ", Time: " + en.getPlace() + ",Date: " + en.getDate()
-                    + ",Comments: " + en.getComments() + ",ImgUrl: "+en.getImageUrl();
-            Log.i("DBTEST: ", log);
-        }
+//        List<com.ruslan_website.travelblog.utils.database.Entry> dbentries = db.getAllEntries();
+//        for (com.ruslan_website.travelblog.utils.database.Entry en : dbentries) {
+//            String log = "Id: "+en.getId()+" ,Name: " + en.getUsername()
+//                    + " ,Place: " + en.getPlace()
+//                    + ", Time: " + en.getPlace() + ",Date: " + en.getDate()
+//                    + ",Comments: " + en.getComments() + ",ImgUrl: "+en.getImageUrl();
+//            Log.i("DBTEST: ", log);
+//        }
 
 
         entries.addView(ll);
