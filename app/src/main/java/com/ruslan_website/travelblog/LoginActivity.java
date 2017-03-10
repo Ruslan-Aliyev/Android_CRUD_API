@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements SurfaceHolder.Ca
             }
         });
     }
-    
+
     @Override
     protected void onPause() {
         if(tts != null){

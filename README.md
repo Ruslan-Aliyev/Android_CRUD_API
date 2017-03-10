@@ -5,11 +5,6 @@ Download APK: http://ruslan-website.com/laravel/travel_blog/apk/TravelBlog.apk
 
 Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
-| Field | Value |
-| --- | --- |
-| User email | guest@guest.com |
-| Password | gggggg |
-
 ## Include:
 
 - Retrofit2, REST, Download image, upload form and file
@@ -100,3 +95,79 @@ Authorization:key=(API Key)
 ## WebView Contact Forms
 
 https://github.com/atabegruslan/Upload
+
+## Retrofit 1.9 vs Retrofit 2.0
+
+### No more distinction in the adapter interface regarding synchronous and asynchronous requests:
+
+#### Retrofit 2.0
+```java
+public interface Service {
+    @GET("retrofit/{version}/get.php")
+    Call<Model> get(@Path("version") String version, @Query("test_name") String test_name);
+}
+```
+
+#### Retrofit 1.9
+```java
+public interface Service {
+    @GET("/retrofit/{version}/get.php")
+    public void getAsync(@Path("version") String version, @Query("test_name") String test_name, Callback<Model> response);
+
+    @GET("/retrofit/{version}/get.php")
+    public Model getSync(@Path("version") String version, @Query("test_name") String test_name);
+}
+```
+
+### Becareful about constructing URLs. Ensure that `/` don't 'double up'
+
+#### In 2.0, should be like this
+```java
+private static final String BASE_URL = "http://url.domain/";
+...
+service = new Retrofit.Builder().baseUrl(BASE_URL).client(client).addConverterFactory(GsonConverterFactory.create()).build().create(Service.class);
+...
+Call<Model> call = service.get(version, queryParam );
+```
+
+```java
+public interface Service {
+    @GET("retrofit/{version}/get.php")
+    Call<Model> get(@Path("version") String version, @Query("query_param") String queryParam);
+}
+```
+
+#### Instead of 1.9's
+```java
+private final String BASE_URL = "http://url.domain/";
+...
+restAdapter = new RestAdapter.Builder().setEndpoint(BASE_URL).build();
+service = restAdapter.create(Service.class);
+...
+// Sync
+Model model = service.getSync(version, queryParam); // In thread
+
+// Async
+service.getAsync(version, queryParam, new Callback<Model>() {
+    @Override
+    public void success(Model model, Response response) {...}
+    @Override
+    public void failure(RetrofitError error) {...}
+});
+```
+
+```java
+public interface Service {
+    @GET("/retrofit/{version}/get.php")
+    public void getAsync(@Path("version") String version, @Query("query_param") String queryParam, Callback<Model> response);
+
+    @GET("/retrofit/{version}/get.php")
+    public Model getSync(@Path("version") String version, @Query("query_param") String queryParam);
+}
+```
+
+Constructed URL is `http://url.domain/retrofit/[version]/get.php?query_param=[queryParam]`
+
+### Full Description of differences
+
+https://github.com/atabegruslan/Android-Retrofit2Get/blob/master/Illustrations/Retrofit2.pdf
