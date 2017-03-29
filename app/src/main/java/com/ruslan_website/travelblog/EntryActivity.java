@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ActionBarOverlayLayout;
@@ -40,6 +41,7 @@ import com.ruslan_website.travelblog.utils.http.service.TokenService;
 import com.ruslan_website.travelblog.utils.social.facebook.Facebook;
 import com.ruslan_website.travelblog.utils.social.google.Google;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
+import com.ruslan_website.travelblog.utils.view.SwiperAdapter;
 
 import org.apache.commons.io.IOUtils;
 
@@ -75,6 +77,7 @@ public class EntryActivity extends AppCompatActivity {
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.swiper) ViewPager swiper;
     private Button[] changingButtons;
 
     APIFactory apiFactory;
@@ -85,6 +88,8 @@ public class EntryActivity extends AppCompatActivity {
 
     private EntryDAO db;
     private int entryTableKey = 0;
+
+    private SwiperAdapter swiperAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +176,9 @@ public class EntryActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         makeEntryList(response.body(), imageName, entry);
+
+                        swiperAdapter = new SwiperAdapter(EntryActivity.this, db);
+                        swiper.setAdapter(swiperAdapter);
                     } catch (Exception e) {
                         String toast = "Update your app. App will close.";
                         String log = "makeEntryList - Error: " + e.getMessage();
@@ -230,7 +238,6 @@ public class EntryActivity extends AppCompatActivity {
         imageView.setPadding(0, 0, 0, 100);
         ll.addView(imageView);
 
-
         db = new EntryDAO(this);
         db.addEntry(new com.ruslan_website.travelblog.utils.database.Entry(
                 entryTableKey,
@@ -241,16 +248,6 @@ public class EntryActivity extends AppCompatActivity {
                 imgFile.getAbsolutePath()
         ));
         entryTableKey++;
-
-//        List<com.ruslan_website.travelblog.utils.database.Entry> dbentries = db.getAllEntries();
-//        for (com.ruslan_website.travelblog.utils.database.Entry en : dbentries) {
-//            String log = "Id: "+en.getId()+" ,Name: " + en.getUsername()
-//                    + " ,Place: " + en.getPlace()
-//                    + ", Time: " + en.getPlace() + ",Date: " + en.getDate()
-//                    + ",Comments: " + en.getComments() + ",ImgUrl: "+en.getImageUrl();
-//            Log.i("DBTEST: ", log);
-//        }
-
 
         entries.addView(ll);
     }

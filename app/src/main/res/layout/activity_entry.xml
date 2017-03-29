@@ -54,6 +54,16 @@
 
     </ScrollView>
 
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/bNewEntry"
+        android:layout_above="@+id/bLogout"
+        android:visibility="gone" />
+
     <ProgressBar
         android:visibility="invisible"
         style="?android:attr/progressBarStyleLarge"

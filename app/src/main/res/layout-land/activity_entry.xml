@@ -37,7 +37,8 @@
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/bNewEntry">
+        android:layout_below="@+id/bNewEntry"
+        android:visibility="gone" >
 
         <LinearLayout
             android:orientation="vertical"
@@ -45,11 +46,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/bNewEntry"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" >
 
         </LinearLayout>
 
     </ScrollView>
+
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/bNewEntry" />
 
     <ProgressBar
         android:visibility="invisible"
