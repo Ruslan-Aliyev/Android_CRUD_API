@@ -28,7 +28,7 @@ public class Auth {
     public static void login(final APIStrategy apiStrategy, final SharedPreferencesManagement mSPM,
                                    final Activity activity, final ProgressBar progressBar,
                                    final Button[] changingButtons, String clientId, String clientSecret,
-                                   String grantType, String type, String username, String password) {
+                                   String grantType, final String type, String username, String password) {
 
         Call<ResponseBody> tokenRequest = apiStrategy.obtainToken(clientId, clientSecret, grantType, type, username, password);
 
@@ -41,6 +41,7 @@ public class Auth {
                         JSONObject jsonObj = new JSONObject(response.body().string());
                         mSPM.setAccessToken(jsonObj.getString("access_token"));
                         Log.i("token", jsonObj.getString("access_token"));
+                        mSPM.setLoginChannel(type);
                         obtainUserInfo(apiStrategy, mSPM, activity, progressBar, changingButtons);
                     } catch (Exception e) {
                         String toast = "Update your app. App will close.";

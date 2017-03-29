@@ -19,12 +19,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
 import com.ruslan_website.travelblog.utils.TravelBlogApplication;
 import com.ruslan_website.travelblog.utils.common.Auth;
 import com.ruslan_website.travelblog.utils.common.Image;
@@ -39,6 +42,8 @@ import com.ruslan_website.travelblog.utils.http.service.EntryService;
 import com.ruslan_website.travelblog.utils.http.service.ImageService;
 import com.ruslan_website.travelblog.utils.http.service.TokenService;
 import com.ruslan_website.travelblog.utils.social.facebook.Facebook;
+import com.ruslan_website.travelblog.utils.social.facebook.FacebookShareCallbackInterface;
+import com.ruslan_website.travelblog.utils.social.facebook.Share;
 import com.ruslan_website.travelblog.utils.social.google.Google;
 import com.ruslan_website.travelblog.utils.storage.SharedPreferencesManagement;
 import com.ruslan_website.travelblog.utils.view.SwiperAdapter;
@@ -74,6 +79,7 @@ public class EntryActivity extends AppCompatActivity {
     @BindView(R.id.bRefresh) Button bRefresh;
     @BindView(R.id.bContact) Button bContact;
     @BindView(R.id.bLogout) Button bLogout;
+    @BindView(R.id.fbShareLink) ImageButton fbShareLink;
     @BindView(R.id.greet) TextView greet;
     @BindView(R.id.entries) LinearLayout entries;
     @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -90,6 +96,8 @@ public class EntryActivity extends AppCompatActivity {
     private int entryTableKey = 0;
 
     private SwiperAdapter swiperAdapter;
+
+    private Share fbShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +128,7 @@ public class EntryActivity extends AppCompatActivity {
 
         if(facebook == null){
             facebook = Facebook.getInstance();
+            facebook.init(EntryActivity.this);
         }
         if(google == null){
             google = Google.getInstance();
@@ -132,6 +141,13 @@ public class EntryActivity extends AppCompatActivity {
         greet.setTextSize(30);
         greet.setGravity(Gravity.CENTER);
         greet.setTypeface(null, Typeface.BOLD);
+
+        if(!mSPM.getLoginChannel().equals("facebook")){
+            fbShareLink.setVisibility(View.GONE);
+        }
+        if (fbShare == null) {
+            fbShare = Share.getInstance();
+        }
 
         if(Network.isConnected()) {
             if (entries.getChildCount() > 0) entries.removeAllViews();
@@ -278,5 +294,23 @@ public class EntryActivity extends AppCompatActivity {
     public void toContactPage(View view){
         Intent intent = new Intent(EntryActivity.this, ContactActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.fbShareLink)
+    public void fbShareLink(View view){
+        fbShare.shareLink("http://ruslan-website.com/laravel/travel_blog/", EntryActivity.this, new FacebookShareCallbackInterface(){
+            @Override
+            public void onError(String msg, FacebookException error) {
+                Toast.makeText(EntryActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancel(String msg) {
+                Toast.makeText(EntryActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onSuccess(String msg, Sharer.Result result) {
+                Toast.makeText(EntryActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

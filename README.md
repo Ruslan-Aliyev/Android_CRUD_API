@@ -11,6 +11,8 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
 - Facebook SignIn
 
+- Facebook Share
+
 - Google SignIn
 
 - GCM
@@ -30,6 +32,8 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 - SQLite
 
 - Swiper View (Similar to Tinder)
+
+- QR Code
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 

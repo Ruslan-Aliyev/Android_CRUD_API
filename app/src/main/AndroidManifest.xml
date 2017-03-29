@@ -68,6 +68,11 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider599675933570009"
+            android:exported="true" />
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

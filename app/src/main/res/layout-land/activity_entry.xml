@@ -88,4 +88,14 @@
         android:layout_alignBottom="@+id/bLogout"
         android:layout_toEndOf="@+id/bLogout" />
 
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/fbShareLink"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fb_share"
+        android:layout_alignTop="@+id/progressBar"
+        android:layout_toEndOf="@+id/bContact"
+        android:layout_above="@+id/swiper" />
+
 </RelativeLayout>

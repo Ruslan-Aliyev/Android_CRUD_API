@@ -91,4 +91,14 @@
         android:layout_alignTop="@+id/bLogout"
         android:layout_alignEnd="@+id/scrollView" />
 
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/fbShareLink"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fb_share"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/bLogout" />
+
 </RelativeLayout>

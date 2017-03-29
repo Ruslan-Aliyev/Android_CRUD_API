@@ -3,6 +3,7 @@ package com.ruslan_website.travelblog;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -54,15 +56,17 @@ public class NewEntryActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 5000;
     private static final int SELECT_FILE = 5001;
     private static final int VOICE_CODE = 123;
+    private static final int QR_CODE = 1234;
     String filePath;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.place) EditText place;
     @BindView(R.id.comments) EditText comments;
     @BindView(R.id.bImage) ImageButton bImage;
     @BindView(R.id.bSubmit) Button bSubmit;
-    @BindView(R.id.bMap) Button bMap;
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.bVoice) Button bVoice;
+    @BindView(R.id.bVoice) ImageButton bVoice;
+    @BindView(R.id.bMap) ImageButton bMap;
+    @BindView(R.id.bQr) ImageButton bQr;
     private Button[] changingButtons;
     private APIFactory apiFactory;
     private APIStrategy apiStrategy;
@@ -112,6 +116,12 @@ public class NewEntryActivity extends AppCompatActivity {
         name.setTextSize(20);
         name.setGravity(Gravity.CENTER);
         name.setTypeface(null, Typeface.BOLD);
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            bQr.setVisibility(View.GONE);
+        }else{
+            bQr.setVisibility(View.VISIBLE);
+        }
 
         if(currentMapLocality != null){
             place.setText(currentMapLocality);
@@ -188,6 +198,11 @@ public class NewEntryActivity extends AppCompatActivity {
                 if(!results.isEmpty()) {
                     place.setText(results.get(0));
                 }
+            }else if (requestCode == QR_CODE){
+                if (resultCode == RESULT_OK) {
+                    String qrResults = data.getStringExtra("SCAN_RESULT");
+                    place.setText(qrResults);
+                }
             }
         }
     }
@@ -258,6 +273,20 @@ public class NewEntryActivity extends AppCompatActivity {
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Now");
         startActivityForResult(i, VOICE_CODE);
+    }
+
+    @OnClick(R.id.bQr)
+    public void qrInput(View view){
+        try {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(intent, QR_CODE);
+        } catch (Exception e) {
+            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+            startActivity(marketIntent);
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.bSubmit)
