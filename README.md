@@ -29,6 +29,8 @@ Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
 
 - SQLite
 
+- Swiper View (Similar to Tinder)
+
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
 ## For Facebook Signin: Sha Key Hash:
