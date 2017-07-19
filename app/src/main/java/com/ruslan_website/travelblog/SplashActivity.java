@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,7 +50,13 @@ public class SplashActivity extends AppCompatActivity implements Animator.Animat
             public void onInit(int status){
                 if(status != TextToSpeech.ERROR){
                     tts.setLanguage(Locale.US);
-                    tts.speak("Welcome to travel blog", TextToSpeech.QUEUE_FLUSH, null);
+
+                    String text = "Welcome to travel blog";
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        tts.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                    } else {
+                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                    }
                 }
             }
         });

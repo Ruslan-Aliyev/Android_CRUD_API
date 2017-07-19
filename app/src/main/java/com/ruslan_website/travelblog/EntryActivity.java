@@ -205,7 +205,8 @@ public class EntryActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     String toast = "Update your app. App will close.";
-                    String log = "Download Image Error" + t.getMessage();
+                    String log = "Download Image Error: " + t.getMessage();
+                    t.printStackTrace();
                     UI.setProgressStatus(EntryActivity.this, false, progressBar, changingButtons, toast, log);
                 }
             });

@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.ruslan_website.travelblog.utils.common.Auth;
+import com.ruslan_website.travelblog.utils.common.Network;
 import com.ruslan_website.travelblog.utils.common.UI;
 import com.ruslan_website.travelblog.utils.gcm.GCM;
 import com.ruslan_website.travelblog.utils.http.api.APIFactory;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ,Manifest.permission.ACCESS_COARSE_LOCATION
                 ,Manifest.permission.ACCESS_FINE_LOCATION
+                ,Manifest.permission.CAMERA
         };
 
         getPermissions(LoginActivity.this, permissions);

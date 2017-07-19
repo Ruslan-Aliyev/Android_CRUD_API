@@ -13,16 +13,16 @@
       },
       "oauth_client": [
         {
-          "client_id": "80198869558-gha6m6ad1e0hk5ek24qnqlrbcj4152kc.apps.googleusercontent.com",
+          "client_id": "80198869558-ku9lei57rcph67ashcbc9i8plha9rhar.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "80198869558-d0olafbsrkf75uiuopb3sfqmqh708uvg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ruslan_website.travelblog",
             "certificate_hash": "2396909c236781239418aef080f041f02f245f2c"
           }
-        },
-        {
-          "client_id": "80198869558-ku9lei57rcph67ashcbc9i8plha9rhar.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
