@@ -1,9 +1,7 @@
 # AndroidApp-Laravel5-TravelBlog
 Android Studio 2, Laravel 5.4
 
-Download APK: http://ruslan-website.com/laravel/travel_blog/apk/TravelBlog.apk
-
-Laravel part of project: https://github.com/atabegruslan/Travel-Blog-Laravel-5
+Laravel part of project: 
 
 ## Include:
 
@@ -97,10 +95,6 @@ Authorization:key=(API Key)
 ## Google Map:
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/MapApi.png)
-
-## WebView Contact Forms
-
-https://github.com/atabegruslan/Upload
 
 ## Retrofit 1.9 vs Retrofit 2.0
 
