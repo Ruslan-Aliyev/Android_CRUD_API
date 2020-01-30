@@ -33,7 +33,7 @@ Laravel part of project:
 
 - QR Code
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Android/master/Screenshot.png)
 
 ## For Facebook Signin: Sha Key Hash:
 
@@ -68,7 +68,7 @@ Method 1: in CLI: `keytool -exportcert -list -v -keystore ~/.android/debug.keyst
 
 Method 2: in Android Studio:
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/ShaCertFingerprint.png)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Android/master/ShaCertFingerprint.png)
 
 ### Google Developer websites:
 
@@ -94,7 +94,7 @@ Authorization:key=(API Key)
 
 ## Google Map:
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/MapApi.png)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Android/master/MapApi.png)
 
 ## WebView
  
@@ -174,4 +174,4 @@ Constructed URL is `http://url.domain/retrofit/[version]/get.php?query_param=[qu
 
 ### Full Description of differences
 
-https://github.com/atabegruslan/Android-Retrofit2Get/blob/master/Illustrations/Retrofit2.pdf
+https://github.com/Ruslan-Aliyev/Android-Retrofit2Get/blob/master/Illustrations/Retrofit2.pdf
