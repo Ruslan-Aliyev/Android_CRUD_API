@@ -1,7 +1,7 @@
 # AndroidApp-Laravel5-TravelBlog
 Android Studio 2, Laravel 5.4
 
-Laravel part of project: 
+Laravel part of project: https://github.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4
 
 ## Include:
 
